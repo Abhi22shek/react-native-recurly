@@ -41,7 +41,7 @@ export default function App() {
                 <Text className="home-balance-label">Balance</Text>
                 <View className="home-balance-row">
                   <Text className="home-balance-amount">
-                    {formatCurrency(HOME_BALANCE.amount)}
+                    {formatCurrency(HOME_BALANCE.amount, HOME_BALANCE.currency)}
                   </Text>
                   <Text className="home-balance-date">
                     {dayjs(HOME_BALANCE.nextRenewalDate).format('MM/DD')}
@@ -74,7 +74,7 @@ export default function App() {
           extraData={expandedSubscriptionId}
           ItemSeparatorComponent={() => <View className="h-3" />}
           showsVerticalScrollIndicator={false}
-          ListEmptyComponent={<Text className="home-empty-state">No upcoming Renewal</Text>}
+          ListEmptyComponent={<Text className="home-empty-state">ListEmptyComponent={<Text className="home-empty-state">No subscriptions</Text>}</Text>}
           contentContainerClassName="pb-30"
         />
       </View>
