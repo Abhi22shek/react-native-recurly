@@ -1,6 +1,6 @@
 import { icons } from "@/constants/icons";
 import { colors } from "@/constants/theme";
-import { useSignIn } from "@clerk/expo";
+import { useClerk, useSignIn } from "@clerk/expo";
 import { type Href, Link, useRouter } from "expo-router";
 import React from "react";
 import {
@@ -18,6 +18,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignIn = () => {
   const { signIn, errors, fetchStatus } = useSignIn();
+  const { setActive } = useClerk();
   const router = useRouter();
 
   const [emailAddress, setEmailAddress] = React.useState("");
@@ -26,24 +27,17 @@ const SignIn = () => {
 
   const isLoading = fetchStatus === "fetching";
   const canSubmit = Boolean(emailAddress && password && !isLoading);
+  const decorateUrl = (url: string) => url;
 
   const navigateToHome = async () => {
-    await signIn.finalize({
-      navigate: ({ session, decorateUrl }) => {
-        if (session?.currentTask) {
-          console.log(session.currentTask);
-          return;
-        }
+    if (!signIn.createdSessionId || !setActive) {
+      console.error("Sign-in completed without an active session id.");
+      return;
+    }
 
-        const url = decorateUrl("/(tabs)");
-        if (typeof window !== "undefined" && url.startsWith("http")) {
-          window.location.href = url;
-          return;
-        }
-
-        router.replace(url as Href);
-      },
-    });
+    await setActive({ session: signIn.createdSessionId });
+    const url = decorateUrl("/(tabs)");
+    router.replace(url as Href);
   };
 
   const handleSubmit = async () => {
