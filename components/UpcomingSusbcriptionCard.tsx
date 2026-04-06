@@ -1,4 +1,4 @@
-import { formateCurrency } from '@/lib/utils/formateCurrency'
+import { formatCurrency } from '@/utils/formatCurrency'
 import { Image, Text, View } from 'react-native'
 
 
@@ -8,7 +8,7 @@ const UpcomingSusbcriptionCard = ({ data: { name, price, daysLeft, currency, ico
             <View className="upcoming-row">
                 <Image source={icon} className="upcoming-icon" />
                 <View>
-                    <Text className="upcoming-price">{formateCurrency(price, currency ?? 'USD')}</Text>
+                    <Text className="upcoming-price">{formatCurrency(price, currency ?? 'USD')}</Text>
                     <Text className='upcoming-meta' numberOfLines={1}>{daysLeft > 1 ? `${daysLeft} days left` : 'last day'}</Text>
                 </View>
             </View>

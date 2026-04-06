@@ -1,4 +1,4 @@
-import { formateCurrency, formatStatusLabel, formatSubscriptionDateTime } from '@/lib/utils/formateCurrency'
+import { formatCurrency, formatStatusLabel, formatSubscriptionDateTime } from '@/utils/formatCurrency'
 import clsx from 'clsx'
 import React from 'react'
 import { Image, Pressable, Text, View } from 'react-native'
@@ -22,7 +22,7 @@ const SubscriptionCard = ({ name, price, currency, icon, startDate, paymentMetho
 
                 <View className='sub-price-box'>
                     <Text className='sub-price'>
-                        {formateCurrency(price, currency ?? 'USD')}
+                        {formatCurrency(price, currency ?? 'USD')}
                     </Text>
                     <Text className='sub-billing'>{billing}</Text>
                 </View>
