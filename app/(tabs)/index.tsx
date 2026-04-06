@@ -74,7 +74,7 @@ export default function App() {
           extraData={expandedSubscriptionId}
           ItemSeparatorComponent={() => <View className="h-3" />}
           showsVerticalScrollIndicator={false}
-          ListEmptyComponent={<Text className="home-empty-state">ListEmptyComponent={<Text className="home-empty-state">No subscriptions</Text>}</Text>}
+          ListEmptyComponent={<Text className="home-empty-state">No subscriptions</Text>}
           contentContainerClassName="pb-30"
         />
       </View>
