@@ -52,7 +52,7 @@ const SubscriptionCard = ({ name, price, currency, icon, iconFallbackText, start
                         <View className='sub-row'>
                             <View className='sub-row-copy'>
                                 <Text className='sub-label'>
-                                    payment:
+                                    Payment:
                                 </Text>
                                 <Text className='sub-value' numberOfLines={1} ellipsizeMode='tail'>
                                     {paymentMethod?.trim()}
@@ -72,7 +72,7 @@ const SubscriptionCard = ({ name, price, currency, icon, iconFallbackText, start
                         <View className='sub-row'>
                             <View className='sub-row-copy'>
                                 <Text className='sub-label'>
-                                    RenewalDate:
+                                    Renewal Date:
                                 </Text>
                                 <Text className='sub-value' numberOfLines={1} ellipsizeMode='tail'>
                                     {renewalDate ? formatSubscriptionDateTime(renewalDate) : ''}

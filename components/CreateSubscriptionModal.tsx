@@ -48,6 +48,20 @@ interface CreateSubscriptionModalProps {
 const initialFrequency: SubscriptionFrequency = "Monthly";
 const initialCategory: SubscriptionCategory = "Entertainment";
 
+const createSubscriptionId = () => {
+  const randomUuid = globalThis.crypto?.randomUUID?.();
+
+  if (randomUuid) {
+    return `subscription-${randomUuid}`;
+  }
+
+  const randomValues = new Uint8Array(16);
+  globalThis.crypto?.getRandomValues?.(randomValues);
+
+  const hexId = Array.from(randomValues, (value) => value.toString(16).padStart(2, "0")).join("");
+  return `subscription-${hexId || Math.random().toString(36).slice(2)}`;
+};
+
 const CreateSubscriptionModal = ({
   visible,
   onClose,
@@ -97,7 +111,7 @@ const CreateSubscriptionModal = ({
       frequency === "Yearly" ? startDate.add(1, "year") : startDate.add(1, "month");
 
     onCreate({
-      id: `subscription-${startDate.valueOf()}`,
+      id: createSubscriptionId(),
       name: trimmedName,
       price: parsedPrice,
       frequency,
@@ -125,7 +139,7 @@ const CreateSubscriptionModal = ({
       onRequestClose={handleClose}
     >
       <Pressable className="modal-overlay" onPress={handleClose}>
-        <Pressable>
+        <Pressable onPress={() => {}}>
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : undefined}
             className="modal-container"

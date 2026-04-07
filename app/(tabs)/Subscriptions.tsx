@@ -9,6 +9,8 @@ import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 
 const SafeAreaView = styled(RNSafeAreaView)
 
+const Separator = () => <View className="h-3" />
+
 const Subscriptions = () => {
   const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
@@ -62,7 +64,7 @@ const Subscriptions = () => {
             />
           )}
           extraData={expandedSubscriptionId}
-          ItemSeparatorComponent={() => <View className="h-3" />}
+          ItemSeparatorComponent={Separator}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <Text className="home-empty-state">
