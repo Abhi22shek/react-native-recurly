@@ -14,8 +14,10 @@ declare global {
 
     interface Subscription {
         id: string;
-        icon: ImageSourcePropType;
+        icon?: ImageSourcePropType;
+        iconFallbackText?: string;
         name: string;
+        frequency?: string;
         plan?: string;
         category?: string;
         paymentMethod?: string;
