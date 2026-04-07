@@ -1,7 +1,8 @@
+import { useSubscriptions } from "@/components/SubscriptionsProvider";
 import SubscriptionCard from "@/components/SubscriptionCard";
-import { HOME_SUBSCRIPTIONS } from "@/constants/data";
 import "@/global.css";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { router } from "expo-router";
 import { styled } from "nativewind";
 import React, { useState } from 'react';
 import { FlatList, Text, TextInput, View } from 'react-native';
@@ -12,13 +13,14 @@ const SafeAreaView = styled(RNSafeAreaView)
 const Separator = () => <View className="h-3" />
 
 const Subscriptions = () => {
+  const { subscriptions } = useSubscriptions()
   const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
   const tabBarHeight = useBottomTabBarHeight()
 
   const normalizedQuery = searchQuery.trim().toLowerCase()
 
-  const filteredSubscriptions = HOME_SUBSCRIPTIONS.filter((subscription) => {
+  const filteredSubscriptions = subscriptions.filter((subscription) => {
     if (!normalizedQuery) return true
 
     const searchableFields = [
@@ -61,6 +63,7 @@ const Subscriptions = () => {
               {...item}
               expanded={expandedSubscriptionId === item.id}
               onPress={() => setExpandedSubscriptionId((currentId) => (currentId === item.id ? null : item.id))}
+              onDetailsPress={(id) => router.push(`/(tabs)/subscriptions/${id}`)}
             />
           )}
           extraData={expandedSubscriptionId}

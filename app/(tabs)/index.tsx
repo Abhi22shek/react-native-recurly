@@ -1,16 +1,19 @@
 import ListHeading from "@/components/LIstHeading";
+import { useSubscriptions } from "@/components/SubscriptionsProvider";
 import SubscriptionCard from "@/components/SubscriptionCard";
 import CreateSubscriptionModal from "@/components/CreateSubscriptionModal";
 import UpcomingSusbcriptionCard from "@/components/UpcomingSusbcriptionCard";
-import { HOME_BALANCE, HOME_SUBSCRIPTIONS, HOME_USER, UPCOMING_SUBSCRIPTIONS } from "@/constants/data";
+import { HOME_BALANCE, HOME_USER } from "@/constants/data";
 import { icons } from "@/constants/icons";
 import images from "@/constants/image";
 import "@/global.css";
+import { getUpcomingSubscriptions } from "@/utils/subscriptionInsights";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import dayjs from "dayjs";
+import { router } from "expo-router";
 import { styled } from "nativewind";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 
@@ -20,12 +23,13 @@ export default function App() {
 
   const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<string | null>(null)
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false)
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>(() => [...HOME_SUBSCRIPTIONS])
+  const { subscriptions, addSubscription } = useSubscriptions()
 
   const tabBarHeight = useBottomTabBarHeight()
+  const upcomingSubscriptions = useMemo(() => getUpcomingSubscriptions(subscriptions), [subscriptions])
 
   const handleCreateSubscription = (subscription: Subscription) => {
-    setSubscriptions((currentSubscriptions) => [subscription, ...currentSubscriptions])
+    addSubscription(subscription)
     setExpandedSubscriptionId(subscription.id)
     setIsCreateModalVisible(false)
   }
@@ -67,9 +71,9 @@ export default function App() {
 
 
               <View className="mb-5">
-                <ListHeading title="Upcoming" />
+                <ListHeading title="Upcoming" actionLabel="See all" onActionPress={() => router.push("/(tabs)/insights")} />
                 <FlatList
-                  data={UPCOMING_SUBSCRIPTIONS}
+                  data={upcomingSubscriptions}
                   renderItem={({ item }) => <UpcomingSusbcriptionCard data={item} />}
                   keyExtractor={(item) => item.id}
                   horizontal
@@ -78,7 +82,7 @@ export default function App() {
                 />
               </View>
 
-              <ListHeading title="All subscriptions" />
+              <ListHeading title="All subscriptions" onActionPress={() => router.push("/(tabs)/subscriptions")} />
             </>
           )}
           data={subscriptions}
@@ -86,6 +90,7 @@ export default function App() {
           renderItem={({ item }) => <SubscriptionCard {...item}
             expanded={expandedSubscriptionId === item.id}
             onPress={() => setExpandedSubscriptionId((currentId) => (currentId === item.id ? null : item.id))}
+            onDetailsPress={(id) => router.push(`/(tabs)/subscriptions/${id}`)}
           />}
           extraData={expandedSubscriptionId}
           ItemSeparatorComponent={() => <View className="h-3" />}

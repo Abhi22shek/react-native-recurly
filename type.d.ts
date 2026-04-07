@@ -31,18 +31,22 @@ declare global {
     }
 
     interface SubscriptionCardProps extends Omit<Subscription, "id"> {
+        id: string;
         expanded: boolean;
         onPress: () => void;
+        onDetailsPress?: (id: string) => void;
         onCancelPress?: () => void;
         isCancelling?: boolean;
     }
 
     interface UpcomingSubscription {
         id: string;
-        icon: ImageSourcePropType;
+        icon?: ImageSourcePropType;
+        iconFallbackText?: string;
         name: string;
         price: number;
         currency?: string;
+        renewalDate?: string;
         daysLeft: number;
     }
 
@@ -52,6 +56,8 @@ declare global {
 
     interface ListHeadingProps {
         title: string;
+        actionLabel?: string;
+        onActionPress?: () => void;
     }
 
     interface HomeUser {

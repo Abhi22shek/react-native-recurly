@@ -125,6 +125,7 @@ const CreateSubscriptionModal = ({
       color: CATEGORY_COLORS[category],
       currency: "USD",
       plan: `${frequency} Plan`,
+      paymentMethod: "Manual entry",
     });
 
     resetForm();
