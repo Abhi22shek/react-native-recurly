@@ -1,5 +1,6 @@
 import ListHeading from "@/components/LIstHeading";
 import SubscriptionCard from "@/components/SubscriptionCard";
+import CreateSubscriptionModal from "@/components/CreateSubscriptionModal";
 import UpcomingSusbcriptionCard from "@/components/UpcomingSusbcriptionCard";
 import { HOME_BALANCE, HOME_SUBSCRIPTIONS, HOME_USER, UPCOMING_SUBSCRIPTIONS } from "@/constants/data";
 import { icons } from "@/constants/icons";
@@ -10,7 +11,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import dayjs from "dayjs";
 import { styled } from "nativewind";
 import { useState } from "react";
-import { FlatList, Image, Text, View } from "react-native";
+import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 
 const SafeAreaView = styled(RNSafeAreaView)
@@ -18,11 +19,24 @@ const SafeAreaView = styled(RNSafeAreaView)
 export default function App() {
 
   const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<string | null>(null)
+  const [isCreateModalVisible, setIsCreateModalVisible] = useState(false)
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>(() => [...HOME_SUBSCRIPTIONS])
 
   const tabBarHeight = useBottomTabBarHeight()
+
+  const handleCreateSubscription = (subscription: Subscription) => {
+    setSubscriptions((currentSubscriptions) => [subscription, ...currentSubscriptions])
+    setExpandedSubscriptionId(subscription.id)
+    setIsCreateModalVisible(false)
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-background p-5" style={{ paddingBottom: tabBarHeight }}>
-
+      <CreateSubscriptionModal
+        visible={isCreateModalVisible}
+        onClose={() => setIsCreateModalVisible(false)}
+        onCreate={handleCreateSubscription}
+      />
 
       <View className="flex-1">
         <FlatList
@@ -34,7 +48,9 @@ export default function App() {
                   <Text className="home-user-name">{HOME_USER.name}</Text>
                 </View>
 
-                <Image source={icons.add} className="home-add-icon" />
+                <Pressable onPress={() => setIsCreateModalVisible(true)}>
+                  <Image source={icons.add} className="home-add-icon" />
+                </Pressable>
               </View>
 
               <View className="home-balance-card">
@@ -62,10 +78,10 @@ export default function App() {
                 />
               </View>
 
-              <ListHeading title="All subscritpion" />
+              <ListHeading title="All subscriptions" />
             </>
           )}
-          data={HOME_SUBSCRIPTIONS}
+          data={subscriptions}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <SubscriptionCard {...item}
             expanded={expandedSubscriptionId === item.id}

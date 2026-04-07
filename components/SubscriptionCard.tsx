@@ -4,12 +4,20 @@ import React from 'react'
 import { Image, Pressable, Text, View } from 'react-native'
 
 
-const SubscriptionCard = ({ name, price, currency, icon, startDate, paymentMethod, billing, color, category, plan, renewalDate, expanded, onPress, status }: SubscriptionCardProps) => {
+const SubscriptionCard = ({ name, price, currency, icon, iconFallbackText, startDate, paymentMethod, billing, color, category, plan, renewalDate, expanded, onPress, status }: SubscriptionCardProps) => {
     return (
         <Pressable onPress={onPress} className={clsx('sub-card', expanded ? 'sub-card-expanded' : 'sub-card')} style={!expanded && color ? { backgroundColor: color } : undefined}>
             <View className='sub-head'>
                 <View className='sub-main'>
-                    <Image source={icon} className='sub-icon' />
+                    {icon ? (
+                        <Image source={icon} className='sub-icon' />
+                    ) : (
+                        <View className='sub-icon items-center justify-center bg-primary/10'>
+                            <Text className='text-lg font-sans-bold text-primary'>
+                                {(iconFallbackText || name.charAt(0) || 'S').toUpperCase()}
+                            </Text>
+                        </View>
+                    )}
                     <View className='sub-copy'>
                         <Text numberOfLines={1} className='sub-title'>
                             {name}
@@ -44,7 +52,7 @@ const SubscriptionCard = ({ name, price, currency, icon, startDate, paymentMetho
                         <View className='sub-row'>
                             <View className='sub-row-copy'>
                                 <Text className='sub-label'>
-                                    payment:
+                                    Payment:
                                 </Text>
                                 <Text className='sub-value' numberOfLines={1} ellipsizeMode='tail'>
                                     {paymentMethod?.trim()}
@@ -64,7 +72,7 @@ const SubscriptionCard = ({ name, price, currency, icon, startDate, paymentMetho
                         <View className='sub-row'>
                             <View className='sub-row-copy'>
                                 <Text className='sub-label'>
-                                    RenewalDate:
+                                    Renewal Date:
                                 </Text>
                                 <Text className='sub-value' numberOfLines={1} ellipsizeMode='tail'>
                                     {renewalDate ? formatSubscriptionDateTime(renewalDate) : ''}
